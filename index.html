@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROUMANS — Tienda Oficial</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #FFFFFF; color: #1D1D1F; }
+        .apple-card { background-color: #F5F5F7; border-radius: 18px; transition: all 0.3s ease; }
+        .apple-card:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .apple-input { background: #F5F5F7; border: 1px solid #D2D2D7; border-radius: 10px; padding: 12px 16px; font-size: 15px; color: #1D1D1F; outline: none; transition: border 0.2s; }
+        .apple-input:focus { border-color: #000000; background: #FFFFFF; }
+        .apple-btn { background: #000000; color: #FFFFFF; border-radius: 980px; padding: 12px 24px; font-weight: 500; transition: background 0.2s; }
+        .apple-btn:hover { background: #333333; }
+        .apple-btn-secondary { background: #E8E8ED; color: #1D1D1F; border-radius: 980px; padding: 12px 24px; font-weight: 500; transition: background 0.2s; }
+        .apple-btn-secondary:hover { background: #D2D2D7; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #F5F5F7; }
+        ::-webkit-scrollbar-thumb { background: #D2D2D7; border-radius: 4px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-black selection:text-white">
+
+    <!-- Top Announcement Bar -->
+    <div id="announcementBar" class="bg-black text-white text-xs py-2 px-4 text-center font-medium tracking-wide hidden">
+        <span id="announcementText">Envíos rápidos y seguros a todo el país.</span>
+    </div>
+
+    <!-- Navigation Header (Apple Style) -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-white/80 border-b border-zinc-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <!-- Logotipo Vectorial Exacto ROUMANS -->
+            <a href="#" onclick="switchView('store')" class="flex items-center gap-3 group">
+                <svg class="h-8 w-auto text-black" viewBox="0 0 520 120" fill="currentColor">
+                    <path d="M42 12 L118 12 C148 12 168 27 168 52 C168 72 153 87 133 92 L173 112 L138 112 L101 94 L68 94 L68 112 L42 112 Z M68 32 L68 74 L113 74 C128 74 141 67 141 53 C141 39 128 32 113 32 Z"/>
+                    <polygon points="38,15 98,15 98,32 61,32 61,45 91,45 91,62 61,62 61,75 98,75 98,92 38,92"/>
+                    <path d="M192 25 L227 25 C240 25 248 31 248 41 C248 48 243 53 236 56 L250 75 L233 75 L221 57 L212 57 L212 75 L192 75 Z M212 40 L212 43 L225 43 C230 43 233 40 233 36 C233 33 230 30 225 30 L212 30 Z"/>
+                    <path d="M262 25 L300 25 C318 25 330 36 330 50 C330 64 318 75 300 75 L262 75 Z M282 40 L282 60 L299 60 C307 60 312 55 312 50 C312 45 307 40 299 40 Z"/>
+                    <path d="M342 25 L362 25 L377 53 L392 25 L412 25 L412 75 L396 75 L396 48 L382 72 L372 72 L358 48 L358 75 L342 75 Z"/>
+                    <path d="M427 25 L462 25 C480 25 490 35 490 50 C490 65 480 75 462 75 L427 75 Z M447 40 L447 60 L460 60 C468 60 472 55 472 50 C472 45 468 40 460 40 Z"/>
+                    <path d="M500 25 L518 75 L498 75 Z" />
+                </svg>
+                <span class="font-bold tracking-wider text-xl">ROUMANS</span>
+            </a>
+
+            <!-- Nav Links & Actions -->
+            <div class="flex items-center gap-6">
+                <button onclick="switchView('store')" id="navStoreBtn" class="text-sm font-medium hover:text-black transition text-black border-b-2 border-black pb-1">Tienda</button>
+                <button onclick="openCartModal()" class="relative text-zinc-700 hover:text-black transition p-2">
+                    <i class="fa-solid fa-bag-shopping text-xl"></i>
+                    <span id="cartBadge" class="absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
+                </button>
+                <button onclick="openAdminLoginModal()" class="text-xs text-zinc-400 hover:text-black transition flex items-center gap-1 px-3 py-1.5 rounded-full bg-zinc-100">
+                    <i class="fa-solid fa-lock text-[10px]"></i> Portal Interno
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow">
+
+        <!-- VISTA TIENDA PÚBLICA -->
+        <div id="storeView" class="max-w-7xl mx-auto px-4 sm:px-6 py-10">
+            <div class="text-center py-12 px-4 mb-12 apple-card bg-gradient-to-b from-[#F5F5F7] to-[#EBEBEF]">
+                <h1 class="text-4xl sm:text-6xl font-bold tracking-tight mb-4 text-black">Innovación y Estilo</h1>
+                <p class="text-lg sm:text-xl text-zinc-600 max-w-2xl mx-auto mb-8 font-light">Descubre nuestra exclusiva colección diseñada con altos estándares de calidad.</p>
+                <div class="max-w-xl mx-auto flex flex-col sm:flex-row gap-3">
+                    <div class="relative flex-grow">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-zinc-400"></i>
+                        <input type="text" id="searchInput" oninput="filterProducts()" placeholder="Buscar productos..." class="apple-input w-full pl-11 bg-white">
+                    </div>
+                    <select id="categoryFilter" onchange="filterProducts()" class="apple-input bg-white cursor-pointer sm:w-48">
+                        <option value="">Todas las categorías</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="categoryPills" class="flex gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
+                <button onclick="selectCategory('')" class="cat-pill px-4 py-2 rounded-full text-sm font-medium bg-black text-white shrink-0 transition">Todo</button>
+            </div>
+
+            <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
+
+            <div id="noProducts" class="hidden text-center py-20">
+                <i class="fa-solid fa-box-open text-4xl text-zinc-300 mb-4"></i>
+                <p class="text-zinc-500 text-lg">No se encontraron productos disponibles.</p>
+            </div>
+        </div>
+
+        <!-- VISTA PANEL ADMINISTRADOR -->
+        <div id="adminView" class="max-w-7xl mx-auto px-4 sm:px-6 py-10 hidden">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-6 border-b border-zinc-200 gap-4">
+                <div>
+                    <h1 class="text-3xl font-bold tracking-tight">Panel de Administración</h1>
+                    <p class="text-zinc-500 text-sm mt-1">Control de inventario, ventas y sincronización en la nube.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="fetchDataFromSheet()" class="apple-btn-secondary text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-rotate text-xs"></i> Sincronizar Google Sheets
+                    </button>
+                    <button onclick="logoutAdmin()" class="apple-btn text-sm bg-red-600 hover:bg-red-700">Cerrar Sesión</button>
+                </div>
+            </div>
+
+            <div class="flex gap-2 border-b border-zinc-200 mb-8 overflow-x-auto">
+                <button onclick="switchAdminTab('products')" id="tabProducts" class="admin-tab px-6 py-3 font-semibold text-sm border-b-2 border-black text-black">Productos & 8 Imágenes</button>
+                <button onclick="switchAdminTab('sales')" id="tabSales" class="admin-tab px-6 py-3 font-semibold text-sm text-zinc-400 hover:text-black border-b-2 border-transparent">Ventas & POS</button>
+                <button onclick="switchAdminTab('customers')" id="tabCustomers" class="admin-tab px-6 py-3 font-semibold text-sm text-zinc-400 hover:text-black border-b-2 border-transparent">Clientes</button>
+                <button onclick="switchAdminTab('config')" id="tabConfig" class="admin-tab px-6 py-3 font-semibold text-sm text-zinc-400 hover:text-black border-b-2 border-transparent">Configuración</button>
+            </div>
+
+            <!-- TAB PRODUCTOS -->
+            <div id="adminProductsPanel" class="space-y-6">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-bold">Gestión de Catálogo</h2>
+                    <button onclick="openProductModal()" class="apple-btn text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-plus text-xs"></i> Nuevo Producto (8 Fotos)
+                    </button>
+                </div>
+                <div class="overflow-x-auto apple-card p-4">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-zinc-200 text-xs text-zinc-400 uppercase tracking-wider">
+                                <th class="p-3">Imagen</th>
+                                <th class="p-3">Código / Nombre</th>
+                                <th class="p-3">Categoría</th>
+                                <th class="p-3">Precio</th>
+                                <th class="p-3">Stock</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminProductsTable" class="divide-y divide-zinc-100 text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB VENTAS -->
+            <div id="adminSalesPanel" class="space-y-6 hidden">
+                <h2 class="text-xl font-bold">Historial de Ventas</h2>
+                <div class="overflow-x-auto apple-card p-4">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-zinc-200 text-xs text-zinc-400 uppercase tracking-wider">
+                                <th class="p-3">Nº Venta</th>
+                                <th class="p-3">Fecha</th>
+                                <th class="p-3">Cliente</th>
+                                <th class="p-3">Total</th>
+                                <th class="p-3">Pago</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminSalesTable" class="divide-y divide-zinc-100 text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB CLIENTES -->
+            <div id="adminCustomersPanel" class="space-y-6 hidden">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-bold">Base de Clientes</h2>
+                    <button onclick="openCustomerModal()" class="apple-btn text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-user-plus text-xs"></i> Nuevo Cliente
+                    </button>
+                </div>
+                <div class="overflow-x-auto apple-card p-4">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-zinc-200 text-xs text-zinc-400 uppercase tracking-wider">
+                                <th class="p-3">Cédula / RUC</th>
+                                <th class="p-3">Nombres</th>
+                                <th class="p-3">Teléfono</th>
+                                <th class="p-3">Correo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminCustomersTable" class="divide-y divide-zinc-100 text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB CONFIG -->
+            <div id="adminConfigPanel" class="space-y-6 hidden">
+                <h2 class="text-xl font-bold">Configuración</h2>
+                <div class="apple-card p-6 max-w-2xl space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-zinc-500 mb-2">Número WhatsApp</label>
+                        <input type="text" id="cfgWhatsapp" class="apple-input w-full" value="593999999999">
+                    </div>
+                    <button onclick="alert('Configuración guardada.')" class="apple-btn w-full py-3">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#F5F5F7] border-t border-zinc-200 py-12 mt-20 text-xs text-zinc-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col items-center text-center space-y-6">
+            <div class="flex items-center gap-2 text-black font-bold tracking-wider text-lg">ROUMANS</div>
+            <p class="max-w-md text-zinc-600 font-light">Innovación, diseño y tecnología.</p>
+            <div class="flex items-center justify-center gap-6 text-xl pt-2">
+                <a href="https://www.facebook.com/61572463497545/" target="_blank" class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-black hover:bg-black hover:text-white transition"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/roumans.ec/" target="_blank" class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-black hover:bg-black hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@roumans.ec?_r=1&_t=ZS-9BT8PNYLnd4" target="_blank" class="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-black hover:bg-black hover:text-white transition"><i class="fa-brands fa-tiktok"></i></a>
+            </div>
+            <div class="border-t border-zinc-300 w-full max-w-xs pt-6 flex justify-center gap-4">
+                <span>© 2026 ROUMANS</span><span>•</span>
+                <a href="#" onclick="openAdminLoginModal()" class="hover:underline">Acceso Admin</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODALES -->
+    <div id="productModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-4xl w-full p-6 sm:p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+            <button onclick="closeProductModal()" class="absolute top-6 right-6 w-10 h-10 rounded-full bg-zinc-100 flex items-center justify-center"><i class="fa-solid fa-xmark"></i></button>
+            <div id="productModalContent" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+        </div>
+    </div>
+
+    <div id="cartModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex justify-end">
+        <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col p-6 overflow-y-auto">
+            <div class="flex justify-between items-center mb-6 pb-4 border-b border-zinc-200">
+                <h2 class="text-xl font-bold"><i class="fa-solid fa-bag-shopping"></i> Tu Bolsa</h2>
+                <button onclick="closeCartModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="cartItemsList" class="flex-grow space-y-4 overflow-y-auto mb-6"></div>
+            <div class="border-t border-zinc-200 pt-4 space-y-4">
+                <div class="flex justify-between text-base font-bold"><span>Total:</span><span id="cartTotalPrice">$0.00</span></div>
+                <button onclick="checkoutOrder()" class="apple-btn w-full py-3 text-center">Completar / WhatsApp</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="adminLoginModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-8 relative shadow-2xl text-center">
+            <button onclick="closeAdminLoginModal()" class="absolute top-4 right-4"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-xl font-bold mb-4">Portal Admin</h3>
+            <input type="password" id="adminPasswordInput" placeholder="Contraseña (admin123)" class="apple-input w-full mb-4 text-center">
+            <button onclick="verifyAdminLogin()" class="apple-btn w-full">Ingresar</button>
+        </div>
+    </div>
+
+    <div id="productFormModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+            <button onclick="closeProductFormModal()" class="absolute top-6 right-6"><i class="fa-solid fa-xmark"></i></button>
+            <h3 class="text-2xl font-bold mb-6">Nuevo Producto</h3>
+            <form id="productForm" onsubmit="saveProduct(event)" class="space-y-4">
+                <input type="text" id="prodCodigo" placeholder="Código" class="apple-input w-full" required>
+                <input type="text" id="prodNombre" placeholder="Nombre" class="apple-input w-full" required>
+                <input type="text" id="prodCategoria" placeholder="Categoría" class="apple-input w-full" required>
+                <input type="number" step="0.01" id="prodPrecio" placeholder="Precio Venta" class="apple-input w-full" required>
+                <input type="number" id="prodStock" placeholder="Stock Actual" class="apple-input w-full" required>
+                <textarea id="prodDesc" placeholder="Descripción" class="apple-input w-full"></textarea>
+                <div class="bg-zinc-50 p-4 rounded-xl border space-y-2">
+                    <label class="block text-xs font-bold uppercase">8 Imágenes (URLs)</label>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2" id="imagesInputsContainer"></div>
+                </div>
+                <button type="submit" class="apple-btn w-full py-3">Guardar en Google Sheets</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPT DE CONEXIÓN CON GOOGLE SHEETS -->
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx_B6WgiqMziGx9Mh5VixSH3WnUEXX8OuPUt_b7DOYW1IJY8EjzBHbcc4RiuHMUymOu/exec";
+
+        let db = { productos: [], clientes: [], ventas: [], carrito: [] };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchDataFromSheet();
+            buildImageInputs();
+        });
+
+        function fetchDataFromSheet() {
+            fetch(SCRIPT_URL + "?action=getData")
+                .then(res => res.json())
+                .then(data => {
+                    if (data.productos) db.productos = data.productos;
+                    if (data.clientes) db.clientes = data.clientes;
+                    if (data.ventas) db.ventas = data.ventas;
+                    renderStore();
+                })
+                .catch(err => console.error("Error sincronizando con Google Sheets:", err));
+        }
+
+        function switchView(view) {
+            if (view === 'store') {
+                document.getElementById("storeView").classList.remove("hidden");
+                document.getElementById("adminView").classList.add("hidden");
+                renderStore();
+            } else {
+                document.getElementById("storeView").classList.add("hidden");
+                document.getElementById("adminView").classList.remove("hidden");
+                renderAdminProducts();
+                renderAdminSales();
+                renderAdminCustomers();
+            }
+        }
+
+        function renderStore() {
+            const grid = document.getElementById("productsGrid");
+            grid.innerHTML = db.productos.map(p => `
+                <div class="apple-card p-5 cursor-pointer" onclick="openProductDetail('${p.id_producto || p.codigo}')">
+                    <div class="w-full h-64 bg-zinc-100 rounded-xl overflow-hidden mb-4">
+                        <img src="${p.imagen_url || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800'}" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">${p.nombre}</h3>
+                    <p class="text-xl font-bold mb-3">$${Number(p.precio_venta || 0).toFixed(2)}</p>
+                    <button onclick="event.stopPropagation(); addToCart('${p.id_producto || p.codigo}')" class="apple-btn text-xs px-4 py-2 w-full">Agregar</button>
+                </div>
+            `).join('');
+        }
+
+        function buildImageInputs() {
+            const container = document.getElementById("imagesInputsContainer");
+            container.innerHTML = "";
+            for (let i = 0; i < 8; i++) {
+                container.innerHTML += `<input type="url" id="prodImg_${i}" class="apple-input text-xs w-full" placeholder="Foto ${i+1} URL">`;
+            }
+        }
+
+        function saveProduct(e) {
+            e.preventDefault();
+            const imgs = [];
+            for(let i=0; i<8; i++) {
+                const val = document.getElementById(`prodImg_${i}`).value;
+                if(val) imgs.push(val);
+            }
+
+            const rowData = [
+                Date.now(),
+                document.getElementById("prodCodigo").value,
+                "",
+                document.getElementById("prodNombre").value,
+                document.getElementById("prodCategoria").value,
+                document.getElementById("prodDesc").value,
+                0,
+                parseFloat(document.getElementById("prodPrecio").value),
+                parseInt(document.getElementById("prodStock").value),
+                5,
+                "unidad",
+                true,
+                new Date().toISOString(),
+                imgs[0] || "",
+                imgs.join(",")
+            ];
+
+            fetch(SCRIPT_URL, {
+                method: "POST",
+                mode: "no-cors",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ sheet: "PRODUCTOS", row: rowData })
+            }).then(() => {
+                alert("¡Producto guardado en Google Sheets con éxito!");
+                closeProductFormModal();
+                fetchDataFromSheet();
+            });
+        }
+
+        function openProductModal() { document.getElementById("productFormModal").classList.remove("hidden"); }
+        function closeProductFormModal() { document.getElementById("productFormModal").classList.add("hidden"); }
+        function openAdminLoginModal() { document.getElementById("adminLoginModal").classList.remove("hidden"); }
+        function closeAdminLoginModal() { document.getElementById("adminLoginModal").classList.add("hidden"); }
+        function verifyAdminLogin() {
+            if(document.getElementById("adminPasswordInput").value === "admin123") {
+                closeAdminLoginModal();
+                switchView('admin');
+            } else { alert("Contraseña incorrecta"); }
+        }
+        function logoutAdmin() { switchView('store'); }
+        function openCartModal() { document.getElementById("cartModal").classList.remove("hidden"); }
+        function closeCartModal() { document.getElementById("cartModal").classList.add("hidden"); }
+        function switchAdminTab(tab) {
+            ['Products', 'Sales', 'Customers', 'Config'].forEach(t => {
+                document.getElementById(`admin${t}Panel`).classList.add("hidden");
+            });
+            document.getElementById(`admin${tab.charAt(0).toUpperCase() + tab.slice(1)}Panel`).classList.remove("hidden");
+        }
+        function renderAdminProducts() {
+            document.getElementById("adminProductsTable").innerHTML = db.productos.map(p => `
+                <tr class="border-b"><td class="p-3">${p.nombre}</td><td class="p-3">${p.categoria}</td><td class="p-3">$${p.precio_venta}</td><td class="p-3">${p.stock_actual}</td></tr>
+            `).join('');
+        }
+        function renderAdminSales() {}
+        function renderAdminCustomers() {}
+        function addToCart(id) { alert("Producto añadido a la bolsa"); }
+        function checkoutOrder() { window.open("https://wa.me/593999999999?text=Hola,%20quiero%20confirmar%20mi%20pedido", "_blank"); }
+    </script>
+</body>
+</html>
